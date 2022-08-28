@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_tarefas/models/todo.dart';
 import 'package:lista_tarefas/repositories/todo_repositories.dart';
+import 'package:lista_tarefas/themes/theme_manager.dart';
 
 import '../widgets/todo_list_item.dart';
 
@@ -14,6 +15,8 @@ class TodoListPage extends StatefulWidget {
 class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController todoController = TextEditingController();
   final TodoRepository todoRepository = TodoRepository();
+
+  ThemeManager _themeManager = ThemeManager();
 
   List<Todo> tarefas = [];
   Todo? deletedTarefa;
@@ -34,108 +37,113 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: todoController,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          labelText: 'Adicione uma tarefa aqui',
-                          hintText: 'Ex.: Estudar Flutter',
-                          errorText: errorText,
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xff89BBFE),
-                              width: 3,
-                            ),
+        appBar: AppBar(
+          title: const Text('Caderninho'),
+          // actions: [
+          //   Switch(
+          //       value: _themeManager.themeMode == ThemeMode.dark,
+          //       onChanged: (newValue) {
+          //         _themeManager.toggleTheme(newValue);
+          //       })
+          // ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: todoController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'Adicione uma tarefa aqui',
+                        hintText: 'Ex.: Estudar Flutter',
+                        errorText: errorText,
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff89BBFE),
+                            width: 3,
                           ),
-                          labelStyle: const TextStyle(
-                            color: Colors.black45,
-                          ),
+                        ),
+                        labelStyle: const TextStyle(
+                          color: Colors.black45,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        String text = todoController.text;
-
-                        if (text.isEmpty) {
-                          setState(() {
-                            errorText = 'O título não pode ser vazio!';
-                          });
-                          return;
-                        }
-
-                        setState(() {
-                          Todo newTodo = Todo(
-                            title: text,
-                            date: DateTime.now(),
-                          );
-                          tarefas.add(newTodo);
-                          errorText = null;
-                        });
-                        todoController.clear();
-                        todoRepository.saveTodoList(tarefas);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff89BBFE),
-                          padding: const EdgeInsets.all(14)),
-                      child: const Icon(
-                        Icons.add,
-                        size: 30,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Flexible(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      for (Todo tarefa in tarefas)
-                        TodoListItem(
-                          todo: tarefa,
-                          onDelete: onDelete,
-                        ),
-                    ],
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      String text = todoController.text;
+
+                      if (text.isEmpty) {
+                        setState(() {
+                          errorText = 'O título não pode ser vazio!';
+                        });
+                        return;
+                      }
+
+                      setState(() {
+                        Todo newTodo = Todo(
+                          title: text,
+                          date: DateTime.now(),
+                        );
+                        tarefas.add(newTodo);
+                        errorText = null;
+                      });
+                      todoController.clear();
+                      todoRepository.saveTodoList(tarefas);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(14)),
+                    child: const Icon(
+                      Icons.add,
+                      size: 30,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
                   children: [
-                    Expanded(
-                      child: Text(
-                          'Você possui ${tarefas.length} tarefas pendentes'),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    ElevatedButton(
-                      onPressed: showDeleteTodosConfirmationDialogs,
-                      child: const Text('Limpar tudo'),
-                      style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff89BBFE),
-                          padding: const EdgeInsets.all(14)),
-                    ),
+                    for (Todo tarefa in tarefas)
+                      TodoListItem(
+                        todo: tarefa,
+                        onDelete: onDelete,
+                      ),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text('Possui ${tarefas.length} tarefas pendentes'),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  ElevatedButton(
+                    onPressed: showDeleteTodosConfirmationDialogs,
+                    child: const Text('Limpar tudo'),
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(14)),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ),
@@ -160,7 +168,6 @@ class _TodoListPageState extends State<TodoListPage> {
         backgroundColor: Colors.white,
         action: SnackBarAction(
           label: 'Desfazer',
-          textColor: const Color(0xff89BBFE),
           onPressed: () {
             setState(() {
               tarefas.insert(
@@ -188,9 +195,7 @@ class _TodoListPageState extends State<TodoListPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            style: TextButton.styleFrom(
-              primary: const Color(0xff89BBFE),
-            ),
+            style: TextButton.styleFrom(),
             child: const Text('Cancelar'),
           ),
           TextButton(
