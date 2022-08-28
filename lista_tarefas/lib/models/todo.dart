@@ -1,6 +1,19 @@
+import 'dart:convert';
+
 class Todo {
-  Todo({required this.title, required this.dateTime});
+  Todo({required this.title, required this.date});
+
+  Todo.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        date = DateTime.parse(json['date']);
 
   String title;
-  DateTime dateTime;
+  DateTime date;
+
+  toJson() {
+    return {
+      'title': title,
+      'date': date.toIso8601String(),
+    };
+  }
 }
