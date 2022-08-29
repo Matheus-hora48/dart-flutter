@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: Home(),
   ));
 }
@@ -29,6 +29,67 @@ class _HomeState extends State<Home> {
         ],
       ),
       backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(
+              Icons.person_outline,
+              size: 120,
+              color: Colors.lightBlueAccent,
+            ),
+            const TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                label: Text("Peso (KG)"),
+                labelStyle: TextStyle(color: Colors.lightBlueAccent),
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.lightBlueAccent, fontSize: 25.0),
+            ),
+            const TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                label: Text("Altura (CM)"),
+                labelStyle: TextStyle(color: Colors.lightBlueAccent),
+              ),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.lightBlueAccent, fontSize: 25.0),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: null,
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith<Color?>((states) {
+                      return Colors.lightBlueAccent;
+                    }),
+                  ),
+                  child: const Text(
+                    'calcular',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const Text(
+              "Info",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.lightBlueAccent,
+                fontSize: 25,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
