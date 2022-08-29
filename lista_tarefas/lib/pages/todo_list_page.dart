@@ -39,6 +39,7 @@ class _TodoListPageState extends State<TodoListPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Caderninho'),
+          backgroundColor: const Color(0xff89BBFE),
           // actions: [
           //   Switch(
           //       value: _themeManager.themeMode == ThemeMode.dark,
