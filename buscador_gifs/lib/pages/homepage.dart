@@ -23,9 +23,9 @@ class _HomePageState extends State<HomePage> {
     http.Response response;
 
     if(_search == null || _search.isEmpty)
-      response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/trending?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&limit=20&rating=G"));
-    else
-      response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/search?api_key=wusbFwUExpkztfjeMr3QRimPUc4kd1J9&q=$_search&limit=19&offset=$_offset&rating=G&lang=en"));
+      response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/trending?api_key=SAxqSeoIhvU0SLJwa5PKPIU39hUvzlWo&limit=25&rating=g"));
+    else 
+      response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/search?api_key=SAxqSeoIhvU0SLJwa5PKPIU39hUvzlWo&q=$_search&limit=25&offset=%$_offset&rating=g&lang=en"));
 
     return json.decode(response.body);
   }
@@ -45,7 +45,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Image.network("https://developers.giphy.com/static/img/dev-logo-lg.7404c00322a8.gif"),
+        title: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Image.network("https://developers.giphy.com/branch/master/static/header-logo-0fec0225d189bc0eae27dac3e3770582.gif"),
+        ),
         centerTitle: true,
       ),
       backgroundColor: Colors.black,
@@ -133,6 +136,8 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return Container(
+              
+              color: Colors.white,
               child: GestureDetector(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
