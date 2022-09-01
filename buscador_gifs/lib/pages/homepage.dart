@@ -22,10 +22,11 @@ class _HomePageState extends State<HomePage> {
   Future<Map> _getGifs() async {
     http.Response response;
 
-    if(_search == null || _search.isEmpty)
+    if(_search == null || _search.isEmpty) {
       response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/trending?api_key=SAxqSeoIhvU0SLJwa5PKPIU39hUvzlWo&limit=25&rating=g"));
-    else 
+    } else {
       response = await http.get(Uri.parse("https://api.giphy.com/v1/gifs/search?api_key=SAxqSeoIhvU0SLJwa5PKPIU39hUvzlWo&q=$_search&limit=25&offset=%$_offset&rating=g&lang=en"));
+    }
 
     return json.decode(response.body);
   }
@@ -55,14 +56,14 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Pesquise Aqui!",
                   labelStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder()
               ),
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
               onSubmitted: (text){
                 setState(() {
@@ -83,14 +84,17 @@ class _HomePageState extends State<HomePage> {
                         width: 200.0,
                         height: 200.0,
                         alignment: Alignment.center,
-                        child: CircularProgressIndicator(
+                        child: const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           strokeWidth: 5.0,
                         ),
                       );
                     default:
-                      if(snapshot.hasError) return Container();
-                      else return _createGifTable(context, snapshot);
+                      if(snapshot.hasError) {
+                        return Container();
+                      } else {
+                        return _createGifTable(context, snapshot);
+                      }
                   }
                 }
             ),
@@ -110,15 +114,15 @@ class _HomePageState extends State<HomePage> {
 
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot){
     return GridView.builder(
-        padding: EdgeInsets.all(10.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        padding: const EdgeInsets.all(10.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0
         ),
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index){
-          if(_search == null || index < snapshot.data["data"].length)
+          if(_search == null || index < snapshot.data["data"].length) {
             return GestureDetector(
               child: FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
@@ -132,16 +136,17 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               onLongPress: (){
+                
               },
             );
-          else
+          } else {
             return Container(
               
               color: Colors.white,
               child: GestureDetector(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: const [
                     Icon(Icons.add, color: Colors.white, size: 70.0,),
                     Text("Carregar mais...",
                       style: TextStyle(color: Colors.white, fontSize: 22.0),)
@@ -154,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             );
+          }
         }
     );
   }

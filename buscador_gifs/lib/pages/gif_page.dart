@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:social_share/social_share.dart';
 
 
 class GifPage extends StatelessWidget {
@@ -18,7 +19,7 @@ class GifPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.share),
             onPressed: (){
-
+              SocialShare.shareOptions(_gifData["images"]["fixed_height"]["url"]);
             },
           )
         ],
