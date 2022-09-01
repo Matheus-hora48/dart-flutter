@@ -1,9 +1,10 @@
-import 'dart:html';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:lista_contatos/models/contact_models.dart';
+import 'package:lista_contatos/pages/contact_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -20,11 +21,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    helper.getAllContacts().then((list) {
-      setState(() {
-        contacts = list;
-      });
-    });
+    _getAllContacts();
+    print(contacts[index].name);
   }
 
   @override
@@ -36,8 +34,8 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showContactPage,
         backgroundColor: Colors.redAccent,
         child: Icon(Icons.add),
       ),
@@ -58,18 +56,18 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.all(16),
           child: Row(
             children: [
-              // Container(
-              //   height: 80,
-              //   width: 80,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     image: DecorationImage(
-              //         image: contacts[index].img != null
-              //             ? FileImage(File(contacts[index].img))
-              //             : AssetImage("images/person.png"),
-              //         fit: BoxFit.cover),
-              //   ),
-              // ),
+              Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: contacts[index].img != null
+                          ? FileImage(File(contacts[index].img))
+                          : AssetImage("assets/imgs/personicon.png"),
+                      fit: BoxFit.cover),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Column(
@@ -95,6 +93,35 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      onTap: () {
+        _showContactPage(contact: contacts[index]);
+      },
     );
+  }
+
+  _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ContactPage(
+                  contact: contact,
+                )));
+    if (recContact != null) {
+      if(contact != null){
+        await helper.updateContact(recContact);
+        _getAllContacts();
+      } else {
+        await helper.saveContact(recContact);
+      }
+      _getAllContacts();
+    }
+  }
+
+  void _getAllContacts() {
+    helper.getAllContacts().then((list) {
+      setState(() {
+        contacts = list;
+      });
+    });
   }
 }
