@@ -22,14 +22,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getAllContacts();
-    print(contacts[index].name);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contatos"),
+        title: const Text("Contatos"),
         backgroundColor: Colors.redAccent,
         centerTitle: true,
       ),
@@ -37,10 +36,10 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _showContactPage,
         backgroundColor: Colors.redAccent,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           return _contactCard(context, index);
@@ -53,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Container(
@@ -64,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                   image: DecorationImage(
                       image: contacts[index].img != null
                           ? FileImage(File(contacts[index].img))
-                          : AssetImage("assets/imgs/personicon.png"),
+                          : const AssetImage("assets/imgs/personicon.png"),
                       fit: BoxFit.cover),
                 ),
               ),
@@ -94,9 +93,61 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onTap: () {
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
     );
+  }
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomSheet(
+              onClosing: (){},
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Ligar',
+                            style:
+                                TextStyle(color: Colors.redAccent, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Ligar',
+                            style:
+                                TextStyle(color: Colors.redAccent, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Ligar',
+                            style:
+                                TextStyle(color: Colors.redAccent, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });
+        });
   }
 
   _showContactPage({Contact contact}) async {
@@ -107,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                   contact: contact,
                 )));
     if (recContact != null) {
-      if(contact != null){
+      if (contact != null) {
         await helper.updateContact(recContact);
         _getAllContacts();
       } else {
