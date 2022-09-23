@@ -41,31 +41,31 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GetBuilder<ValueController>(
-              init: valueController,
-              builder: (ctrl) {
-                return Text('Valor Definido: ${ctrl.definedValue}');
+            Obx(
+              () {
+                return Text('Valor Definido: ${valueController.definedValue}');
               },
             ),
-            TextField(
-              controller: textController,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: TextField(
+                controller: textController,
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            GetBuilder<ValueController>(
-                init: valueController,
-                builder: (ctrl) {
-                  return ctrl.isLoading
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () {
-                            String value = textController.text;
-                            valueController.setValue(value);
-                          },
-                          child: const Text('confirmar'),
-                        );
-                })
+            Obx(() {
+              return valueController.isLoading.value
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () {
+                        String value = textController.text;
+                        valueController.setValue(value);
+                      },
+                      child: const Text('Confirmar'),
+                    );
+            })
           ],
         ),
       ),
