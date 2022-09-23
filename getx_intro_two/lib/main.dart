@@ -103,7 +103,9 @@ class HomePage extends StatelessWidget {
 
                 // Botão para salvar a idade
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    userController.setUserAge(int.parse(ageController.text));
+                  },
                   child: const Text('Salvar'),
                 ),
               ],
